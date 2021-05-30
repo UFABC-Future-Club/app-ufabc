@@ -7,8 +7,8 @@ import { Title } from '../components/Title'
 import { Row } from '../components/Row'
 import { Button } from '../components/Button'
 
-const largura = Dimensions.get('window').width
-const altura = Dimensions.get('window').height
+export const largura = Dimensions.get('window').width
+export const altura = Dimensions.get('window').height
 
 export default function App() {
   return (
@@ -21,8 +21,10 @@ export default function App() {
             contentContainerStyle={{ width: ((largura) * 2) - 72 }}
             horizontal={true}
             showsHorizontalScrollIndicator={false} >
+
             <Card style={{ width: largura - 64 }} />
             <Card style={{ width: largura - 64 }} />
+
           </ScrollView>
         </Row>
 
