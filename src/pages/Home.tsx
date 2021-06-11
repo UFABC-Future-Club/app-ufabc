@@ -1,16 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList, Dimensions } from 'react-native';
 import { Card } from '../components/Card'
 import { Container } from '../components/Container'
 import { Title } from '../components/Title'
 import { Row } from '../components/Row'
 import { Button } from '../components/Button'
+import { CurrentAulas } from '../context/AulasContext'
 
 export const largura = Dimensions.get('window').width
 export const altura = Dimensions.get('window').height
 
 export default function App() {
+  const { aulas } = useContext(CurrentAulas);
+
   return (
     <SafeAreaView style={styles.container}>
       <Container>
@@ -18,12 +21,15 @@ export default function App() {
         <Row style={{ width: largura }}>
           <ScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={{ width: ((largura) * 2) - 72 }}
+            contentContainerStyle={{ width: ((largura) * aulas.length) - 72 }}
             horizontal={true}
             showsHorizontalScrollIndicator={false} >
 
-            <Card style={{ width: largura - 64 }} />
-            <Card style={{ width: largura - 64 }} />
+            {aulas.map(aula => (
+              <Card key={Math.random()} style={{ width: largura - 64 }}>
+                <Text>{aula.turma}</Text>
+              </Card>
+            ))}
 
           </ScrollView>
         </Row>

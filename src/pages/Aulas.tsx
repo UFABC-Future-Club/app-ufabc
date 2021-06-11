@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from "react-native";
 import { altura, largura } from './Home'
 import { Input } from "../components/Input"
@@ -6,8 +6,9 @@ import { Title } from "../components/Title"
 import LottieView from 'lottie-react-native'
 import axios from 'axios'
 import { Card } from '../components/Card';
+import { CurrentAulas } from '../context/AulasContext'
 
-interface Aula {
+export interface Aula {
   cod_turma: string,
   pratica: string[],
   prof_pratica: string,
@@ -21,14 +22,18 @@ interface Aula {
 const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [ra, setRa] = useState('');
-  const [aulas, setAulas] = useState<Aula[]>([])
+  // const [aulas, setAulas] = useState<Aula[]>([])
+
+  const { aulas, editAulas } = useContext(CurrentAulas);
 
   function obterAulas() {
     if (ra !== '') {
 
-      axios.get(`/aulas/${ra}`)
+      axios.get(`https://app-ufabc.herokuapp.com/aulas/${ra}`)
         .then((resposta) => {
-          setAulas(resposta.data.aulas)
+          editAulas(resposta.data.aulas)
+
+          console.log(resposta.data.aulas)
         }).catch((e) => {
           throw new Error(e);
         })
@@ -78,7 +83,7 @@ const App = () => {
           </View>
         </View>
       </Modal>
-      { aulas?.length === 0 && (
+      {aulas?.length === 0 && (
         <Pressable
           style={[styles.button, styles.buttonOpen]}
           onPress={() => setModalVisible(true)}
