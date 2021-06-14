@@ -13,6 +13,60 @@ import { Aula } from './Aulas';
 export const largura = Dimensions.get('window').width
 export const altura = Dimensions.get('window').height
 
+function diaSemana(parametro: string): number {
+  const segunda = /^segunda/gi
+  const terca = /^terça/gi
+  const quarta = /^quarta/gi
+  const quinta = /^quinta/gi
+  const sexta = /^sexta/gi
+  const sabado = /^sábado/gi
+
+  if (segunda.test(parametro)) {
+    return 0;
+  } else if (terca.test(parametro)) {
+    return 1;
+  } else if (quarta.test(parametro)) {
+    return 2;
+  } else if (quinta.test(parametro)) {
+    return 3;
+  } else if (sexta.test(parametro)) {
+    return 4;
+  } else if (sabado.test(parametro)) {
+    return 5
+  } else {
+    return 5
+  }
+}
+
+function separarAulas(aulas: Aula[]): string[] {
+  const apenasAulas = aulas.map((a) => [...a.teoria.filter(e => e !== ''), ...a.pratica.filter(e => e !== '')])
+
+  let quinzenal1: string[][] = [[], [], [], [], [], []]
+  let quinzenal2: string[][] = [[], [], [], [], [], []]
+
+  apenasAulas.map(aula => {
+    const q1 = /quinzenal I$/gi
+    const q2 = /quinzenal II$/gi
+
+    aula.map((a) => {
+      // q1, q2, semanal
+      if (q1.test(a)) {
+        // adc vetor q1
+        quinzenal1[diaSemana(a)].push(a)
+      } else if (q2.test(a)) {
+        // adc vetor q2
+        quinzenal2[diaSemana(a)].push(a)
+      } else {
+        // adc aos dois vetores
+        quinzenal1[diaSemana(a)].push(a)
+        quinzenal2[diaSemana(a)].push(a)
+      }
+    })
+  })
+
+  return quinzenal1[0]
+}
+
 export default function App() {
   const { aulas, editAulas } = useContext(CurrentAulas);
 
@@ -20,9 +74,12 @@ export default function App() {
     // logica
     const obterAulas = async () => {
       const aulasSalvas = await AsyncStorage.getItem('@storage_aula') || ""
-      const jsonAulas: Aula[] = JSON.parse(aulasSalvas)
 
-      editAulas(jsonAulas)
+      if (aulasSalvas !== "") {
+        const jsonAulas: Aula[] = JSON.parse(aulasSalvas)
+
+        editAulas(jsonAulas)
+      }
     }
 
     obterAulas()
@@ -39,9 +96,9 @@ export default function App() {
             horizontal={true}
             showsHorizontalScrollIndicator={false} >
 
-            {aulas.map(aula => (
+            {separarAulas(aulas).map(aula => (
               <Card key={Math.random()} style={{ width: largura - 64 }}>
-                <Text>{aula.turma}</Text>
+                <Text>{aula}</Text>
               </Card>
             ))}
 
