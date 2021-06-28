@@ -55,13 +55,14 @@ soAulas.map(aula => {
 
 console.log(quinzenal1)
 
-function diff_weeks(dt2, dt1) 
+function diff_weeks() 
  {
+  const dt2 = new Date();
+  const dt1 = new Date(2021, 04, 24);
 
   var diff =(dt2.getTime() - dt1.getTime()) / 1000;
   diff /= (60 * 60 * 24 * 7);
-  return Math.abs(Math.round(diff));
-  
+  return Math.floor(Math.abs(diff)) + 1;
  }
 
 dt1 = new Date(2014,10,2);

@@ -22,27 +22,37 @@ function diaSemana(parametro: string): number {
   const sabado = /^sábado/gi
 
   if (segunda.test(parametro)) {
-    return 0;
-  } else if (terca.test(parametro)) {
     return 1;
-  } else if (quarta.test(parametro)) {
+  } else if (terca.test(parametro)) {
     return 2;
-  } else if (quinta.test(parametro)) {
+  } else if (quarta.test(parametro)) {
     return 3;
-  } else if (sexta.test(parametro)) {
+  } else if (quinta.test(parametro)) {
     return 4;
+  } else if (sexta.test(parametro)) {
+    return 5;
   } else if (sabado.test(parametro)) {
-    return 5
+    return 6
   } else {
-    return 5
+    return 6
   }
+}
+
+function semanaAtual(): number {
+  const dt2 = new Date();
+  // yyyy-mm-dd
+  const dt1 = new Date('2021-05-25');
+
+  var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+  diff /= (60 * 60 * 24 * 7);
+  return Math.floor(Math.abs(diff)) + 1;
 }
 
 function separarAulas(aulas: Aula[]): string[] {
   const apenasAulas = aulas.map((a) => [...a.teoria.filter(e => e !== ''), ...a.pratica.filter(e => e !== '')])
 
-  let quinzenal1: string[][] = [[], [], [], [], [], []]
-  let quinzenal2: string[][] = [[], [], [], [], [], []]
+  let quinzenal1: string[][] = [[], [], [], [], [], [], []]
+  let quinzenal2: string[][] = [[], [], [], [], [], [], []]
 
   apenasAulas.map(aula => {
     const q1 = /quinzenal I$/gi
@@ -64,7 +74,15 @@ function separarAulas(aulas: Aula[]): string[] {
     })
   })
 
-  return quinzenal1[0]
+  const indice = new Date().getDay();
+  // Quinzenal
+  const semana = semanaAtual()
+
+  if (semana % 2 == 0) {
+    return quinzenal2[indice]
+  }
+
+  return quinzenal1[indice]
 }
 
 export default function App() {
