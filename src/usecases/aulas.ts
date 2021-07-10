@@ -1,28 +1,11 @@
 import { Aula } from "../pages/Aulas"
 
 function diaSemana(parametro: string): number {
-  const segunda = /^segunda/gi
-  const terca = /^terça/gi
-  const quarta = /^quarta/gi
-  const quinta = /^quinta/gi
-  const sexta = /^sexta/gi
-  const sabado = /^sábado/gi
+  const diasRegex = [/^segunda/gi, /^terça/gi, /^quarta/gi, /^quinta/gi, /^sexta/gi, /^sábado/gi]
+  const filteredDia = (diasRegex.filter(dia => dia.test(parametro)))[0]
+  const indiceDia = diasRegex.indexOf(filteredDia) + 1
 
-  if (segunda.test(parametro)) {
-    return 1;
-  } else if (terca.test(parametro)) {
-    return 2;
-  } else if (quarta.test(parametro)) {
-    return 3;
-  } else if (quinta.test(parametro)) {
-    return 4;
-  } else if (sexta.test(parametro)) {
-    return 5;
-  } else if (sabado.test(parametro)) {
-    return 6
-  } else {
-    return 6
-  }
+  return indiceDia ? indiceDia : 6
 }
 
 function semanaAtual(): number {
