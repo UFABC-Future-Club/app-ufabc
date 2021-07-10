@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from "react-native";
 import { altura, largura } from './Home'
 import { Input } from "../components/Input"
@@ -22,7 +22,6 @@ export interface Aula {
 const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [ra, setRa] = useState('');
-  // const [aulas, setAulas] = useState<Aula[]>([])
 
   const { aulas, editAulas } = useContext(CurrentAulas);
 
